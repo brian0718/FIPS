@@ -1,0 +1,33 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: debezium-postgres-connect-cluster
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  bootstrapServers: 'my-cluster-kafka-bootstrap:9092'
+  build:
+    output:
+      type: imagestream
+      image: kafka-connect-dbz-postgres:latest
+    plugins:
+      - name: debezium-postgres-connector
+        artifacts:
+          - type: zip
+            url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/1.6.4.Final/debezium-connector-postgres-1.6.4.Final-plugin.zip
+            name: debezium-postgres-connector
+  config:
+    status.storage.topic: debezium-postgres-cluster-status
+    status.storage.replication.factor: 3
+    offset.storage.topic: debezium-postgres-cluster-offsets
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    group.id: debezium-postgres-cluster
+    value.converter.schemas.enable: true
+    config.storage.replication.factor: 3
+    config.storage.topic: debezium-postgres-cluster-configs
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: true
+    offset.storage.replication.factor: 3
+    replicas: 1
+  version: 2.8.0
+
