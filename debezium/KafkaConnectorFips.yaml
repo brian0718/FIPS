@@ -1,0 +1,20 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: fips-connector  
+  labels:
+    strimzi.io/cluster: debezium-postgres-connect-cluster
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 1  
+  config:  
+    database.hostname: 192.168.1.162 
+    database.port: 5432 
+    database.user: postgres
+    database.password: postgres
+    database.dbname: fips
+    database.server.name: fips_on_prem  
+    database.history.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092  
+    table.exclude.list: public.price_history
+    column.exclude.list: public.accounts.account_name
+
