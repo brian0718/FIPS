@@ -17,4 +17,5 @@ spec:
     database.history.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092  
     table.exclude.list: public.price_history
     column.exclude.list: public.accounts.account_name
+    plugin.name: pgoutput
 
